@@ -151,20 +151,91 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_monitoring_manager_lifecycle() {
+        // Arrange
+        let mut monitor = Monitor::new("cpu_monitor");
+        assert_eq!(monitor.name, "cpu_monitor");
+        assert!(!monitor.is_enabled());
+
+        // Act
+        let en_res = monitor.enable();
+        // Assert
+        assert!(en_res.is_ok());
+        assert!(monitor.is_enabled());
+
+        // Act
+        let dis_res = monitor.disable();
+        // Assert
+        assert!(dis_res.is_ok());
+        assert!(!monitor.is_enabled());
+    }
+
+    #[test]
     fn test_monitoring_manager_init() {
+        // Arrange
         let mut manager = Alert::new();
         assert!(!manager.is_initialized());
-        assert!(manager.init().is_ok());
+
+        // Act
+        let init_res = manager.init();
+
+        // Assert
+        assert!(init_res.is_ok());
         assert!(manager.is_initialized());
     }
 
     #[test]
-    fn test_monitoring_resource_add() {
+    fn test_monitoring_resource_add_and_query() {
+        // Arrange
         let mut manager = Alert::new();
         manager.init().unwrap();
-        let resource = Monitor::new("test");
+        let resource = Monitor::new("disk_monitor");
+
+        // Act
         let id = manager.add(resource).unwrap();
+
+        // Assert
         assert_eq!(id, 0);
-        assert!(manager.get(0).is_some());
+        let item = manager.get(0);
+        assert!(item.is_some());
+        assert_eq!(item.unwrap().name, "disk_monitor");
+        assert_eq!(manager.list().len(), 1);
+    }
+
+    #[test]
+    fn test_monitoring_uninitialized_add_fails() {
+        // Arrange
+        let mut manager = Alert::new();
+        let resource = Monitor::new("uninit_test");
+
+        // Act
+        let res = manager.add(resource);
+
+        // Assert
+        assert_eq!(res, Err(MonitorError::NotSupported));
+    }
+
+    #[test]
+    fn test_monitoring_shutdown() {
+        // Arrange
+        let mut manager = Alert::new();
+        manager.init().unwrap();
+        manager.add(Monitor::new("res1")).unwrap();
+
+        // Act
+        let shut_res = manager.shutdown();
+
+        // Assert
+        assert!(shut_res.is_ok());
+        assert!(!manager.is_initialized());
+        assert_eq!(manager.list().len(), 0);
+    }
+
+    #[test]
+    fn test_monitoring_error_display() {
+        // Arrange & Act & Assert
+        assert_eq!(format!("{}", MonitorError::NotSupported), "Monitoring: operation not supported");
+        assert_eq!(format!("{}", MonitorError::NotFound), "Monitoring: resource not found");
+        assert_eq!(format!("{}", MonitorError::PermissionDenied), "Monitoring: permission denied");
     }
 }
