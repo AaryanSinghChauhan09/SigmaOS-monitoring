@@ -1,11 +1,11 @@
 # SigmaOS-monitoring
 
-SigmaOS development and system tools component.
+SigmaOS web, monitoring, and security component.
 
 ## Features
-- Essential tooling for SigmaOS
+- Production mode support
+- Comprehensive logging
 - Configuration management
-- Auto-start capability
 
 ## Usage
 ```bash

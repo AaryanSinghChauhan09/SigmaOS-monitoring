@@ -5,17 +5,20 @@ use monitoring::monitoring;
 #[derive(Parser)]
 struct Cli {
     #[arg(short, long)]
-    auto: bool,
+    production: bool,
 }
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
-    let config = monitoring::Config { auto_start: cli.auto, ..Default::default() };
+    let config = monitoring::Config { 
+        production_mode: cli.production, 
+        ..Default::default() 
+    };
     let mut component = monitoring::new(config);
     
     component.initialize()?;
-    component.run()?;
+    component.start()?;
     
-    println!("SigmaOS-monitoring operational");
+    println!("SigmaOS-monitoring running");
     Ok(())
 }

@@ -2,7 +2,7 @@
 name = "monitoring"
 version = "0.1.0"
 edition = "2021"
-description = "SigmaOS SigmaOS-monitoring component - Development and system tools"
+description = "SigmaOS SigmaOS-monitoring component - Web, monitoring, and security"
 license = "MIT"
 repository = "https://github.com/AaryanSinghChauhan09/SigmaOS-monitoring"
 

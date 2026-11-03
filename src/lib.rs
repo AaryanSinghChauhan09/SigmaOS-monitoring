@@ -1,6 +1,6 @@
 //! SigmaOS-monitoring - SigmaOS Component
 //!
-//! Development and system tools for SigmaOS.
+//! Web, monitoring, and security component for SigmaOS.
 
 use anyhow::Result;
 use log::info;
@@ -9,12 +9,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     pub enabled: bool,
-    pub auto_start: bool,
+    pub production_mode: bool,
 }
 
 impl Default for Config {
     fn default() -> Self {
-        Self { enabled: true, auto_start: true }
+        Self { enabled: true, production_mode: false }
     }
 }
 
@@ -29,11 +29,14 @@ impl monitoring {
 
     pub fn initialize(&mut self) -> Result<()> {
         info!("Initializing SigmaOS-monitoring");
+        if self.config.production_mode {
+            info!("Production mode enabled");
+        }
         Ok(())
     }
 
-    pub fn run(&mut self) -> Result<()> {
-        info!("Running SigmaOS-monitoring");
+    pub fn start(&mut self) -> Result<()> {
+        info!("Starting SigmaOS-monitoring");
         Ok(())
     }
 }
