@@ -1,8 +1,39 @@
-//! SigmaOS Monitoring
-//! System monitoring and alerting
+//! SigmaOS-monitoring - SigmaOS Component
+//!
+//! Development and system tools for SigmaOS.
 
-pub mod monitoring;
+use anyhow::Result;
+use log::info;
+use serde::{Deserialize, Serialize};
 
-pub use monitoring::{
-    Alert, Alert as Monitoring, Monitor, MonitorError, MonitoringResult,
-};
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Config {
+    pub enabled: bool,
+    pub auto_start: bool,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self { enabled: true, auto_start: true }
+    }
+}
+
+pub struct monitoring {
+    config: Config,
+}
+
+impl monitoring {
+    pub fn new(config: Config) -> Self {
+        Self { config }
+    }
+
+    pub fn initialize(&mut self) -> Result<()> {
+        info!("Initializing SigmaOS-monitoring");
+        Ok(())
+    }
+
+    pub fn run(&mut self) -> Result<()> {
+        info!("Running SigmaOS-monitoring");
+        Ok(())
+    }
+}
