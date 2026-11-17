@@ -3,12 +3,12 @@ name = "SigmaOS-monitoring"
 tier = 2
 stability = "scaffold"
 language = "rust"
-description = "monitoring component"
+description = "SigmaOS system monitoring metrics and telemetry"
 upstream = []
 
 [contract]
 provides = ["component"]
-depends_on = []
+depends_on = ["SigmaOS-system"]
 
 [maturity]
 status = "Scaffold"
